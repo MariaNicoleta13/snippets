@@ -2,6 +2,7 @@
 
 import { db } from "@/db";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export async function editSnippet(id: number, code: string) {
   await db.snippet.update({
@@ -9,6 +10,7 @@ export async function editSnippet(id: number, code: string) {
     data: { code },
   });
 
+  revalidatePath(`/snippets/${id}`); // due to generateStaticParams in page
   redirect(`/snippets/${id}`);
 }
 
@@ -17,12 +19,13 @@ export async function deleteSnippet(id: number) {
     where: { id },
   });
 
+  revalidatePath("/");
   redirect("/");
 }
 
 export async function createSnippet(
   formState: { message?: string },
-  formData: FormData
+  formData: FormData,
 ) {
   try {
     // validate user inputs
@@ -59,6 +62,8 @@ export async function createSnippet(
       };
     }
   }
+
+  revalidatePath("/");
   // go to homepage once done
   redirect("/"); // This throws an error instance that next listens to so needs to be put outside of try catch
 }

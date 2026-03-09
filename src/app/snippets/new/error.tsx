@@ -5,7 +5,7 @@ interface ErrorPageProps {
   reset: () => void;
 }
 
-export default function ErrorPage({ error, reset }: ErrorPageProps) {
+export default function ErrorPage({ error }: ErrorPageProps) {
   return (
     <div className="p-4 bg-red-100 text-red-800 rounded">{error.message}</div>
   );
